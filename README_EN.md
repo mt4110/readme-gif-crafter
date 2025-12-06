@@ -116,6 +116,13 @@ max_size_mb = 5.0
 - `fps`: Frames per second. Lower values reduce file size significantly.
 - `max_size_mb`: Target file size. The tool will adjust quality to try to fit this limit (Logic currently in development).
 
+## Roadmap & TODO
+
+- [ ] **Windows Support**: Currently verified on macOS/Linux.
+- [ ] **Advanced Optimization**: Improve `max_size_mb` logic with bitrate adjustments.
+- [ ] **Interactive Mode**: TUI for selecting crop areas interactively.
+- [ ] **Preview**: Ability to preview settings before generation.
+
 ## License
 
 MIT License
