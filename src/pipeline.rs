@@ -92,20 +92,33 @@ impl Pipeline {
         args.push("-filter_complex".to_string());
         args.push(full_filter);
 
-        let output = self
-            .cli
-            .output
-            .clone()
-            .unwrap_or_else(|| "output.gif".to_string());
+        let output = self.derive_output_filename();
         args.push(output);
 
         Ok(args)
     }
 
+    fn derive_output_filename(&self) -> String {
+        if let Some(output) = &self.cli.output {
+            return output.clone();
+        }
+
+        if let Some(input) = &self.cli.input {
+            let path = std::path::Path::new(input);
+            if let Some(stem) = path.file_stem() {
+                if let Some(parent) = path.parent() {
+                    return parent
+                        .join(format!("{}.gif", stem.to_string_lossy()))
+                        .to_string_lossy()
+                        .to_string();
+                }
+            }
+        }
+
+        "output.gif".to_string()
+    }
+
     pub fn get_output_filename(&self) -> String {
-        self.cli
-            .output
-            .clone()
-            .unwrap_or_else(|| "output.gif".to_string())
+        self.derive_output_filename()
     }
 }

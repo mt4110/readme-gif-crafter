@@ -7,12 +7,18 @@ MP4 録画ファイルから、README 用に最適化された GIF デモを生�
 
 ## 特徴
 
-- **シンプルなデフォルト**: `rgc input.mp4` で標準的な 800px 幅の GIF を生成。
+- **シンプルなデフォルト**: `rgc input.mp4` で、自動的に `input.gif` を生成。
 - **高画質・軽量**: `ffmpeg` のパレット生成機能等を使い、高品質かつサイズを抑えた GIF を作成。
 - **Markdown 出力**: 貼り付けるだけの Markdown スニペットを標準出力。
 - **設定可能**: `.readme-gif.toml` で `github` (最大 10MB) や `mini` (最大 5MB) などのプリセットを管理。
 
-## インストール
+## 前提条件
+
+**FFmpeg** のインストールが必要です。
+
+- **macOS**: `brew install ffmpeg`
+- **Linux**: `sudo apt install ffmpeg`
+- **Windows**: `choco install ffmpeg` または公式サイトからダウンロード
 
 ## インストール
 
@@ -66,7 +72,7 @@ cargo test
 ## 使い方
 
 ```bash
-# 基本的な使用法（幅 800px, 15fps）
+# 基本的な使用法（input.gif が生成されます）
 rgc demo.mp4
 
 # プリセット指定
@@ -120,7 +126,7 @@ max_size_mb = 5.0
 
 ## ロードマップ & TODO
 
-- [ ] **Windows サポート**: 現在は macOS/Linux での動作を確認しています。
+- [x] **Windows サポート**: 基本動作とパスの互換性を確認済み（試験的）。
 - [ ] **高度なサイズ最適化**: `max_size_mb` のロジックを改善し、ビットレート調整なども行う。
 - [ ] **インタラクティブモード**: クロップ範囲を対話的に選択できる機能。
 - [ ] **プレビュー機能**: 生成前に設定を確認できる機能。
