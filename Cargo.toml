@@ -1,0 +1,17 @@
+[package]
+name = "readme-gif-crafter"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.0", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_derive = "1.0"
+toml = "0.7"
+anyhow = "1.0"
+# log = "0.4" # Optional, if we want standard logging
+# env_logger = "0.10" # Optional
+
+[[bin]]
+name = "rgc"
+path = "src/main.rs"

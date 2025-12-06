@@ -1,0 +1,12 @@
+# .readme-gif.toml
+default_preset = "github"
+
+[github]
+width = 800
+fps = 15
+max_size_mb = 10.0
+
+[mini]
+width = 480
+fps = 12
+max_size_mb = 5.0
