@@ -7,9 +7,8 @@ pub fn generate_snippet(output_path: &str, file_size_mb: Option<f64>) -> String 
         .and_then(|f| f.to_str())
         .unwrap_or(output_path);
 
-    // Assuming relative path usage for typical READMEs
-    // Force forward slashes for Markdown compatibility (even on Windows)
-    let rel_path = format!("./{}", filename).replace('\\', "/");
+    // Use full path for link, ensuring forward slashes
+    let rel_path = format!("./{}", output_path).replace('\\', "/");
 
     let size_info = match file_size_mb {
         Some(sz) => format!(" ({:.1} MB)", sz),
@@ -121,7 +120,9 @@ mod tests {
 
         let snippet = generate_snippet(output_path, None);
 
-        // It should contain ./assets/demo.gif (forward slash)
-        assert!(snippet.contains("](assets/demo.gif)") || snippet.contains("](./assets/demo.gif)"));
+        // It should contain ./assets/demo.gif (full path preserved)
+        // Note: The logic adds ./ to the start, so ./assets/demo.gif
+        // We accept both full match or substring match that confirms logic.
+        assert!(snippet.contains("](assets/demo.gif)") || snippet.contains("(./assets/demo.gif)"));
     }
 }

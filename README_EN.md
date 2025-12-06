@@ -7,7 +7,7 @@ A CLI tool to craft optimized GIF demos for your READMEs from MP4 recordings.
 
 ## Features
 
-- **Simple Defaults**: Just run `rgc input.mp4` to automatically generate `input.gif`.
+- **Simple Defaults**: Just run `rgc demo.mp4` to automatically generate `demo.gif`.
 - **Optimized**: Uses `ffmpeg` with palette generation for high-quality, low-size GIFs.
 - **Markdown Ready**: Outputs the precise Markdown snippet to copy-paste.
 - **Configurable**: Use presets like `github` (max 10MB) or `mini` (max 5MB) via `.readme-gif.toml`.

@@ -7,7 +7,7 @@ MP4 録画ファイルから、README 用に最適化された GIF デモを生�
 
 ## 特徴
 
-- **シンプルなデフォルト**: `rgc input.mp4` で、自動的に `input.gif` を生成。
+- **シンプルなデフォルト**: `rgc demo.mp4` で、自動的に `demo.gif` を生成。
 - **高画質・軽量**: `ffmpeg` のパレット生成機能等を使い、高品質かつサイズを抑えた GIF を作成。
 - **Markdown 出力**: 貼り付けるだけの Markdown スニペットを標準出力。
 - **設定可能**: `.readme-gif.toml` で `github` (最大 10MB) や `mini` (最大 5MB) などのプリセットを管理。
@@ -72,7 +72,7 @@ cargo test
 ## 使い方
 
 ```bash
-# 基本的な使用法（input.gif が生成されます）
+# 基本的な使用法（demo.gif が生成されます）
 rgc demo.mp4
 
 # プリセット指定
