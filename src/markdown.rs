@@ -117,10 +117,10 @@ mod tests {
     #[test]
     fn test_generate_snippet_path_normalization() {
         // Simulate windows path behavior or input
-        let output_path = "assets\\demo.gif"; 
-        
+        let output_path = "assets\\demo.gif";
+
         let snippet = generate_snippet(output_path, None);
-        
+
         // It should contain ./assets/demo.gif (forward slash)
         assert!(snippet.contains("](assets/demo.gif)") || snippet.contains("](./assets/demo.gif)"));
     }
