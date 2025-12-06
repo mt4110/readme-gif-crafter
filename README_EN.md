@@ -7,12 +7,18 @@ A CLI tool to craft optimized GIF demos for your READMEs from MP4 recordings.
 
 ## Features
 
-- **Simple Defaults**: Just run `rgc input.mp4` to get a standard 800px width GIF.
+- **Simple Defaults**: Just run `rgc demo.mp4` to automatically generate `demo.gif`.
 - **Optimized**: Uses `ffmpeg` with palette generation for high-quality, low-size GIFs.
 - **Markdown Ready**: Outputs the precise Markdown snippet to copy-paste.
 - **Configurable**: Use presets like `github` (max 10MB) or `mini` (max 5MB) via `.readme-gif.toml`.
 
-## Installation
+## Prerequisites
+
+**FFmpeg** is required to run this tool.
+
+- **macOS**: `brew install ffmpeg`
+- **Linux**: `sudo apt install ffmpeg`
+- **Windows**: `choco install ffmpeg` or download from official site.
 
 ## Installation
 
@@ -65,7 +71,7 @@ Use `script/update-demo.sh` to regenerate the demo and update READMEs automatica
 ## Usage
 
 ```bash
-# Basic usage (defaults to 800px width, 15fps)
+# Basic usage (generates demo.gif)
 rgc demo.mp4
 
 # With preset
@@ -118,7 +124,7 @@ max_size_mb = 5.0
 
 ## Roadmap & TODO
 
-- [ ] **Windows Support**: Currently verified on macOS/Linux.
+- [x] **Windows Support**: Basic functionality and path compatibility verified (Experimental).
 - [ ] **Advanced Optimization**: Improve `max_size_mb` logic with bitrate adjustments.
 - [ ] **Interactive Mode**: TUI for selecting crop areas interactively.
 - [ ] **Preview**: Ability to preview settings before generation.

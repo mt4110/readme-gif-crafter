@@ -15,6 +15,17 @@ use pipeline::Pipeline;
 fn main() -> Result<()> {
     let cli = Cli::parse();
 
+    // 0. Pre-flight check
+    if let Err(e) = ffmpeg::check_availability() {
+        eprintln!("Error: {}", e);
+        eprintln!("Header: FFmpeg not found!");
+        eprintln!("  Please install FFmpeg to use this tool.");
+        eprintln!("  - macOS: brew install ffmpeg");
+        eprintln!("  - Linux: sudo apt install ffmpeg");
+        eprintln!("  - Windows: choco install ffmpeg");
+        std::process::exit(1);
+    }
+
     // 1. Config loading
     let config = load_config()?;
 

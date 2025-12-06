@@ -9,6 +9,20 @@ pub struct VideoMetadata {
     pub fps: f64,
 }
 
+pub fn check_availability() -> Result<()> {
+    Command::new("ffmpeg")
+        .arg("-version")
+        .output()
+        .map_err(|_| anyhow!("ffmpeg not found"))?;
+
+    Command::new("ffprobe")
+        .arg("-version")
+        .output()
+        .map_err(|_| anyhow!("ffprobe not found"))?;
+
+    Ok(())
+}
+
 pub fn probe(path: &str) -> Result<VideoMetadata> {
     let output = Command::new("ffprobe")
         .args([

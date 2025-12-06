@@ -7,8 +7,8 @@ pub fn generate_snippet(output_path: &str, file_size_mb: Option<f64>) -> String 
         .and_then(|f| f.to_str())
         .unwrap_or(output_path);
 
-    // Assuming relative path usage for typical READMEs
-    let rel_path = format!("./{}", filename);
+    // Use full path for link, ensuring forward slashes
+    let rel_path = format!("./{}", output_path).replace('\\', "/");
 
     let size_info = match file_size_mb {
         Some(sz) => format!(" ({:.1} MB)", sz),
@@ -66,14 +66,11 @@ pub fn update_readme(
 
         Ok(())
     } else {
-        // If markers not found, maybe append? or Warn?
-        // For safety, let's just warn/error.
-        Err(anyhow::anyhow!(
-            "Markers {} and {} not found in {}",
-            start_marker,
-            end_marker,
-            readme_path
-        ))
+        eprintln!(
+            "Warning: Markers '{}' and '{}' not found in {}. Skipping README update.",
+            start_marker, end_marker, readme_path
+        );
+        Ok(())
     }
 }
 
@@ -98,5 +95,34 @@ mod tests {
         assert!(!new_content.contains("Old"));
 
         fs::remove_file(path).unwrap();
+    }
+
+    #[test]
+    fn test_update_readme_missing_markers() {
+        let path = "test_readme_no_marker.md";
+        let content = "No markers here";
+        fs::write(path, content).unwrap();
+
+        let snippet = "Markdown";
+        // Should not error
+        update_readme(path, snippet, "rgc").unwrap();
+
+        let new_content = fs::read_to_string(path).unwrap();
+        assert_eq!(new_content, content); // Should be unchanged
+
+        fs::remove_file(path).unwrap();
+    }
+
+    #[test]
+    fn test_generate_snippet_path_normalization() {
+        // Simulate windows path behavior or input
+        let output_path = "assets\\demo.gif";
+
+        let snippet = generate_snippet(output_path, None);
+
+        // It should contain ./assets/demo.gif (full path preserved)
+        // Note: The logic adds ./ to the start, so ./assets/demo.gif
+        // We accept both full match or substring match that confirms logic.
+        assert!(snippet.contains("](assets/demo.gif)") || snippet.contains("(./assets/demo.gif)"));
     }
 }

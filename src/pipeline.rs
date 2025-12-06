@@ -92,20 +92,93 @@ impl Pipeline {
         args.push("-filter_complex".to_string());
         args.push(full_filter);
 
-        let output = self
-            .cli
-            .output
-            .clone()
-            .unwrap_or_else(|| "output.gif".to_string());
+        let output = self.derive_output_filename();
         args.push(output);
 
         Ok(args)
     }
 
+    fn derive_output_filename(&self) -> String {
+        if let Some(output) = &self.cli.output {
+            return output.clone();
+        }
+
+        if let Some(input) = &self.cli.input {
+            let path = std::path::Path::new(input);
+            if let Some(stem) = path.file_stem() {
+                let filename = format!("{}.gif", stem.to_string_lossy());
+                if let Some(parent) = path.parent() {
+                    if !parent.as_os_str().is_empty() {
+                        return parent.join(&filename).to_string_lossy().to_string();
+                    }
+                }
+                return filename;
+            }
+        }
+
+        "output.gif".to_string()
+    }
+
     pub fn get_output_filename(&self) -> String {
-        self.cli
-            .output
-            .clone()
-            .unwrap_or_else(|| "output.gif".to_string())
+        self.derive_output_filename()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn make_pipeline(input: Option<&str>, output: Option<&str>) -> Pipeline {
+        let config = Config {
+            default_preset: None,
+            presets: std::collections::HashMap::new(),
+        };
+        let cli = Cli {
+            input: input.map(|s| s.to_string()),
+            output: output.map(|s| s.to_string()),
+            markdown_only: false,
+            dry_run: false,
+            start: None,
+            end: None,
+            duration: None,
+            crop: None,
+            width: None,
+            fps: None,
+            max_size: None,
+            preset: None,
+            update_readme: None,
+            marker: "rgc".to_string(),
+        };
+        Pipeline::new(config, cli)
+    }
+
+    #[test]
+    fn test_derive_output_filename_explicit() {
+        let p = make_pipeline(Some("input.mp4"), Some("custom.gif"));
+        assert_eq!(p.derive_output_filename(), "custom.gif");
+    }
+
+    #[test]
+    fn test_derive_output_filename_root() {
+        let p = make_pipeline(Some("input.mp4"), None);
+        assert_eq!(p.derive_output_filename(), "input.gif");
+    }
+
+    #[test]
+    fn test_derive_output_filename_nested() {
+        let p = make_pipeline(Some("assets/demo.mp4"), None);
+        // On unix this expects assets/demo.gif. On windows tests calling this might fail if path separator differs?
+        // But logic uses Path::join so it should be valid for the OS running the test.
+        // We compare using Path to be safe or string if we know separators.
+        // Let's assume standard behavior for now.
+        let out = p.derive_output_filename();
+        assert!(out.ends_with("demo.gif"));
+        assert!(out.contains("assets"));
+    }
+
+    #[test]
+    fn test_derive_output_filename_no_ext() {
+        let p = make_pipeline(Some("video"), None);
+        assert_eq!(p.derive_output_filename(), "video.gif");
     }
 }
