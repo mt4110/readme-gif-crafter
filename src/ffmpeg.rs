@@ -11,7 +11,7 @@ pub struct VideoMetadata {
 
 pub fn probe(path: &str) -> Result<VideoMetadata> {
     let output = Command::new("ffprobe")
-        .args(&[
+        .args([
             "-v",
             "error",
             "-select_streams",
