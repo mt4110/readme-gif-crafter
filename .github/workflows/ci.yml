@@ -14,7 +14,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
+
+      - name: Install pinned Rust
+        run: |
+          RUST_VERSION=$(python3 -c "import tomllib; print(tomllib.load(open('.mise.toml', 'rb'))['tools']['rust'])")
+          rustup toolchain install "$RUST_VERSION" --profile minimal --component rustfmt --component clippy
+          echo "RUSTUP_TOOLCHAIN=$RUST_VERSION" >> "$GITHUB_ENV"
 
       - name: Install FFmpeg
         run: |
@@ -22,26 +28,25 @@ jobs:
           sudo apt-get install -y ffmpeg
 
       - name: Cache Cargo Registry
-        uses: actions/cache@v3
+        uses: actions/cache@v6.1.0
         with:
           path: |
-            ~/.cargo/bin/
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-cargo-${{ hashFiles('.mise.toml', '**/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-
 
       - name: Build
-        run: cargo build --verbose
+        run: cargo build --locked --verbose
 
       - name: Test
-        run: cargo test --verbose
+        run: cargo test --locked --verbose
 
       - name: Format Check
         run: cargo fmt --all -- --check
 
       - name: Clippy Check
-        run: cargo clippy -- -D warnings
+        run: cargo clippy --locked --all-targets -- -D warnings

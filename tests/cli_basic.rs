@@ -2,8 +2,8 @@ use std::process::Command;
 
 #[test]
 fn test_cli_help() {
-    let output = Command::new("cargo")
-        .args(&["run", "--", "--help"])
+    let output = Command::new(env!("CARGO_BIN_EXE_rgc"))
+        .arg("--help")
         .output()
         .expect("Failed to execute command");
 
@@ -14,8 +14,8 @@ fn test_cli_help() {
 
 #[test]
 fn test_markdown_generation_dry_run() {
-    let output = Command::new("cargo")
-        .args(&["run", "--", "--dry-run", "fake.mp4"])
+    let output = Command::new(env!("CARGO_BIN_EXE_rgc"))
+        .args(["--dry-run", "fake.mp4"])
         .output()
         .expect("Failed to execute command");
 
@@ -27,17 +27,8 @@ fn test_markdown_generation_dry_run() {
 
 #[test]
 fn test_cli_args_parsing() {
-    let output = Command::new("cargo")
-        .args(&[
-            "run",
-            "--",
-            "--dry-run",
-            "fake.mp4",
-            "--width",
-            "1280",
-            "--fps",
-            "30",
-        ])
+    let output = Command::new(env!("CARGO_BIN_EXE_rgc"))
+        .args(["--dry-run", "fake.mp4", "--width", "1280", "--fps", "30"])
         .output()
         .expect("Failed to execute command");
 
@@ -58,8 +49,8 @@ fn test_cli_args_parsing() {
 
 #[test]
 fn test_markdown_only() {
-    let output = Command::new("cargo")
-        .args(&["run", "--", "--markdown-only", "existing_demo.gif"])
+    let output = Command::new(env!("CARGO_BIN_EXE_rgc"))
+        .args(["--markdown-only", "existing_demo.gif"])
         .output()
         .expect("Failed to execute command");
 

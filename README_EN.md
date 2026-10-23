@@ -42,7 +42,7 @@ nix run . -- input.mp4
 Requires `ffmpeg` to be installed on your system.
 
 ```bash
-git clone https://github.com/yourusername/readme-gif-crafter.git
+git clone https://github.com/mt4110/readme-gif-crafter.git
 cd readme-gif-crafter
 cargo install --path .
 ```
@@ -64,9 +64,12 @@ Use `script/update-demo.sh` to regenerate the demo and update READMEs automatica
 ```
 
 ### Environment
-- **Rust Version**: `1.82.0` (Pinned via `.mise.toml` & `flake.nix`)
-- **Mise**: If using `mise`, version is automatically pinned.
-- **Nix**: `flake.nix` provides the same version (`1.82.0`), ensuring consistency.
+- **Rust**: `1.99.1`, pinned in `.mise.toml`. Nix builds, the development shell, and CI read the same value.
+- **Nixpkgs**: Stable `26.05`. Exact revisions are pinned in `flake.lock`, and Rust dependencies are pinned in `Cargo.lock`.
+- **FFmpeg**: The Nix package includes FFmpeg at runtime; `nix run` needs no separate host installation.
+- **Verification**: `nix flake check` builds and tests the package, then converts a GIF without relying on the host's `PATH`.
+
+To update dependencies, check the stable releases, update `.mise.toml` and any necessary `Cargo.toml` requirements, then run `nix flake update` and `cargo update`. Verify with `nix flake check` and `nix develop -c cargo clippy --locked --all-targets -- -D warnings`.
 
 ## Usage
 
