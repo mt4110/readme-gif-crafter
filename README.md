@@ -43,7 +43,7 @@ nix run . -- input.mp4
 `ffmpeg` がインストールされている必要があります。
 
 ```bash
-git clone https://github.com/yourusername/readme-gif-crafter.git
+git clone https://github.com/mt4110/readme-gif-crafter.git
 cd readme-gif-crafter
 cargo install --path .
 ```
@@ -65,9 +65,12 @@ cargo test
 ```
 
 ### 環境について
-- **Rust Version**: `1.82.0` (Pinned via `.mise.toml` & `flake.nix`)
-- **Mise**: `mise` を使用している場合、`.mise.toml` により自動でバージョンが固定されます。
-- **Nix**: `flake.nix` も同じバージョン (`1.82.0`) を提供するため、どちらを使っても整合性が保たれます。
+- **Rust**: `1.99.1`。固定値は `.mise.toml` で管理し、Nix のビルド・開発シェルと CI もこの値を読み取ります。
+- **Nixpkgs**: 安定版 `26.05`。正確なリビジョンは `flake.lock`、Rust の依存関係は `Cargo.lock` で固定します。
+- **FFmpeg**: `nix run` では Nixpkgs の FFmpeg を同梱し、ホストへの別途インストールは不要です。
+- **検証**: `nix flake check` でビルド・テストに加え、ホストの `PATH` に頼らない GIF 変換を確認します。
+
+依存関係を更新するときは、安定版を確認して `.mise.toml` と必要な `Cargo.toml` の要件を更新し、`nix flake update` と `cargo update` を実行します。その後、`nix flake check` と `nix develop -c cargo clippy --locked --all-targets -- -D warnings` を実行してください。
 
 ## 使い方
 
@@ -79,7 +82,6 @@ rgc demo.mp4
 rgc --preset mini demo.mp4
 
 # カスタム指定
-rgc demo.mp4 --width 1024 --fps 30 --output my-demo.gif
 rgc demo.mp4 --width 1024 --fps 30 --output my-demo.gif
 ```
 

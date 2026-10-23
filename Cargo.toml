@@ -4,13 +4,10 @@ version = "0.2.0"
 edition = "2021"
 
 [dependencies]
-clap = { version = "4.0", features = ["derive"] }
-serde = { version = "1.0", features = ["derive"] }
-serde_derive = "1.0"
-toml = "0.7"
-anyhow = "1.0"
-# log = "0.4" # Optional, if we want standard logging
-# env_logger = "0.10" # Optional
+clap = { version = "4.6.7", features = ["derive"] }
+serde = { version = "1.0.229", features = ["derive"] }
+toml = "1.1.8"
+anyhow = "1.0.104"
 
 [[bin]]
 name = "rgc"

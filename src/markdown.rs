@@ -7,8 +7,12 @@ pub fn generate_snippet(output_path: &str, file_size_mb: Option<f64>) -> String 
         .and_then(|f| f.to_str())
         .unwrap_or(output_path);
 
-    // Use full path for link, ensuring forward slashes
-    let rel_path = format!("./{}", output_path).replace('\\', "/");
+    let image_path = if path.is_absolute() {
+        output_path.to_string()
+    } else {
+        format!("./{}", output_path)
+    }
+    .replace('\\', "/");
 
     let size_info = match file_size_mb {
         Some(sz) => format!(" ({:.1} MB)", sz),
@@ -17,7 +21,7 @@ pub fn generate_snippet(output_path: &str, file_size_mb: Option<f64>) -> String 
 
     format!(
         "Generated: {}{}\nMarkdown:\n\n![Demo]({})",
-        filename, size_info, rel_path
+        filename, size_info, image_path
     )
 }
 
@@ -124,5 +128,13 @@ mod tests {
         // Note: The logic adds ./ to the start, so ./assets/demo.gif
         // We accept both full match or substring match that confirms logic.
         assert!(snippet.contains("](assets/demo.gif)") || snippet.contains("(./assets/demo.gif)"));
+    }
+
+    #[test]
+    fn test_generate_snippet_absolute_path() {
+        let path = std::env::current_dir().unwrap().join("demo.gif");
+        let path = path.to_str().unwrap();
+        let snippet = generate_snippet(path, None);
+        assert!(snippet.contains(&format!("![Demo]({})", path.replace('\\', "/"))));
     }
 }

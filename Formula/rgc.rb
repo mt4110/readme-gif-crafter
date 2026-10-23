@@ -1,8 +1,8 @@
 class Rgc < Formula
   desc "A CLI tool to craft optimized GIF demos for your READMEs from MP4 recordings"
-  homepage "https://github.com/masakitakemura/readme-gif-crafter"
-  url "https://github.com/masakitakemura/readme-gif-crafter/archive/refs/tags/v0.2.0.tar.gz"
-  sha256 "0000000000000000000000000000000000000000000000000000000000000000" # TODO: Update with actual SHA256 of the release tarball
+  homepage "https://github.com/mt4110/readme-gif-crafter"
+  url "https://github.com/mt4110/readme-gif-crafter/archive/refs/tags/v0.2.0.tar.gz"
+  sha256 "e88f85650a1d9fb1de7ca64e060a8deb710aae4e7c3c7bdb64c8f65431218c31"
   license "MIT"
 
   depends_on "rust" => :build
